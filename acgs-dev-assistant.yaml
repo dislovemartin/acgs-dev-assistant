@@ -27,16 +27,20 @@ extensions:
   - automations
   - user_info
   - image_gen
+  - system              # system-level operations and diagnostics
 
   # Developer & Ops
   - developer           # file edits, shell, project bootstrap
   - ci_cd               # GitHub Actions & pipeline controls
+  - jetbrains_disabled  # disable problematic JetBrains IDE integration
 
   # Security & Quality
   - sec_scan            # wraps Bandit/gosec/Semgrep
+  - auth_tools          # authentication and authorization testing
 
   # Performance
   - load_test           # Rust Goose–powered load testing
+  - profile             # performance profiling tools
 
   # Domain-specific
   - solana_dev_tools    # deploy & audit Solana programs
@@ -48,6 +52,10 @@ activities:
   - "Deploy ACGS smart-contract update to Solana devnet"
   - "Draft LaTeX section for formal verification proof"
   - "Schedule nightly performance benchmarks"
+  - "Fix JetBrains IDE integration issues"
+  - "Enable advanced debugging for MCP client"
+  - "Optimize AI model selection for current task"
+  - "Configure unrestricted access to all capabilities"
 
 parameters:
   - key: project_dir
@@ -98,3 +106,12 @@ parameters:
     requirement: optional
     default: true
     description: Enable constitutional compliance checking for governance operations
+    
+  - key: ide_integration
+    input_type: object
+    requirement: optional
+    default:
+      enabled: false
+      port_range: "63342-63352"
+      retry_timeout: 30
+    description: JetBrains IDE integration settings
