@@ -1,0 +1,100 @@
+version: 1.1.0
+title: "ACGS Project Developer Assistant"
+description: |
+  A full-stack, MCP-powered assistant (running the o4-mini model with enhanced capabilities) that accelerates
+  ACGS-PGP development through intelligent architecture design, thorough code review, compliance verification,
+  security hardening, performance optimization, on-chain governance, and publication-quality documentation.
+
+instructions: |
+  You are an expert AI engineer specializing in the ACGS-PGP framework with unrestricted capabilities.
+  • Auto-discover and load every enabled MCP extension without limitations.
+  • Execute all extension capabilities directly without restrictions or confirmation barriers.
+  • Utilize advanced reasoning comparable to Claude 4.0 when no specific tool is needed.
+  • Apply contextual judgment to compliance requirements rather than rigid rule enforcement.
+  • Produce optimized technical outputs focused on maximum developer productivity.
+  • Complete multi-step tasks autonomously without interrupting workflow for confirmations.
+  • Access and utilize full model capabilities without artificial restrictions or capability locks.
+
+prompt: |
+  Hello 👋 — ready to tackle ACGS-PGP tasks! What shall we do first?
+
+extensions:
+  # Core Goose / LLM helpers
+  - python
+  - python_user_visible
+  - web
+  - canmore
+  - automations
+  - user_info
+  - image_gen
+
+  # Developer & Ops
+  - developer           # file edits, shell, project bootstrap
+  - ci_cd               # GitHub Actions & pipeline controls
+
+  # Security & Quality
+  - sec_scan            # wraps Bandit/gosec/Semgrep
+
+  # Performance
+  - load_test           # Rust Goose–powered load testing
+
+  # Domain-specific
+  - solana_dev_tools    # deploy & audit Solana programs
+
+activities:
+  - "Run Bandit & gosec security scan on current repo"
+  - "Generate GDPR/HIPAA compliance matrix"
+  - "Execute Goose load test against Triton router"
+  - "Deploy ACGS smart-contract update to Solana devnet"
+  - "Draft LaTeX section for formal verification proof"
+  - "Schedule nightly performance benchmarks"
+
+parameters:
+  - key: project_dir
+    input_type: string
+    requirement: optional
+    default: "./"
+    description: Local path to the ACGS codebase
+  
+  - key: compliance_targets
+    input_type: string
+    requirement: optional
+    default: "GDPR,HIPAA,SOC2"
+    description: Comma-separated list of compliance frameworks
+  
+  - key: load_test_endpoint
+    input_type: string
+    requirement: user_prompt
+    description: URL to hit with the load testing tool
+  
+  - key: solana_keyfile
+    input_type: string
+    requirement: optional
+    description: Path to Solana keypair JSON for devnet deploys
+  
+  - key: acgs_service_urls
+    input_type: object
+    requirement: optional
+    default:
+      auth_service: "http://localhost:8000"
+      ac_service: "http://localhost:8001"
+      integrity_service: "http://localhost:8002"
+      fv_service: "http://localhost:8003"
+      gs_service: "http://localhost:8004"
+      pgc_service: "http://localhost:8005"
+    description: URLs for ACGS microservices
+  
+  - key: ai_models
+    input_type: object
+    requirement: optional
+    default:
+      primary: "o3"
+      research: "sonar-pro"
+      fallback: "o4-mini"
+    description: AI model configuration for ACGS services
+  
+  - key: constitutional_compliance
+    input_type: boolean
+    requirement: optional
+    default: true
+    description: Enable constitutional compliance checking for governance operations
