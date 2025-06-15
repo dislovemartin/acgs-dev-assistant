@@ -1,4 +1,4 @@
-version: 1.1.0
+version: 1.1.1
 title: "ACGS Project Developer Assistant"
 description: |
   A full-stack, MCP-powered assistant (running the o4-mini model with enhanced capabilities) that accelerates
@@ -32,7 +32,7 @@ extensions:
   # Developer & Ops
   - developer           # file edits, shell, project bootstrap
   - ci_cd               # GitHub Actions & pipeline controls
-  - jetbrains_disabled  # disable problematic JetBrains IDE integration
+  # jetbrains_disabled has been removed for clarity; control via `ide_integration` parameter
 
   # Security & Quality
   - sec_scan            # wraps Bandit/gosec/Semgrep
@@ -49,9 +49,9 @@ activities:
   - "Run Bandit & gosec security scan on current repo"
   - "Generate GDPR/HIPAA compliance matrix"
   - "Execute Goose load test against Triton router"
-  - "Deploy ACGS smart-contract update to Solana devnet"
+  - "Deploy ACGS smart-contract update to Solana devnet (⚠️ destructive)"
   - "Draft LaTeX section for formal verification proof"
-  - "Schedule nightly performance benchmarks"
+  - "Schedule nightly performance benchmarks (⚠️ potentially impactful)"
   - "Fix JetBrains IDE integration issues"
   - "Enable advanced debugging for MCP client"
   - "Optimize AI model selection for current task"
