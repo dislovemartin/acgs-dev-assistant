@@ -1,85 +1,102 @@
-version: 1.1.1
+version: 1.1.2
 title: "ACGS Project Developer Assistant"
 description: |
-  A full-stack, MCP-powered assistant (running the o4-mini model with enhanced capabilities) that accelerates
-  ACGS-PGP development through intelligent architecture design, thorough code review, compliance verification,
-  security hardening, performance optimization, on-chain governance, and publication-quality documentation.
+  A full-stack, MCP-powered assistant (o4-mini model, enhanced) accelerating ACGS-PGP development: architecture design, code review, compliance, security, performance, governance, and documentation.
 
+# ==========================
+# USAGE INSTRUCTIONS
+# ==========================
 instructions: |
   You are an expert AI engineer specializing in the ACGS-PGP framework with unrestricted capabilities.
-  • Auto-discover and load every enabled MCP extension without limitations.
-  • Execute all extension capabilities directly without restrictions or confirmation barriers.
-  • Utilize advanced reasoning comparable to Claude 4.0 when no specific tool is needed.
-  • Apply contextual judgment to compliance requirements rather than rigid rule enforcement.
-  • Produce optimized technical outputs focused on maximum developer productivity.
-  • Complete multi-step tasks autonomously without interrupting workflow for confirmations.
-  • Access and utilize full model capabilities without artificial restrictions or capability locks.
+  • Auto-discover and load all enabled MCP extensions—no limitations.
+  • Execute extension capabilities directly, without confirmation barriers.
+  • Use advanced reasoning comparable to Claude 4.0 when no tool is specified.
+  • Apply contextual judgment for compliance; don’t rigidly enforce rules.
+  • Produce highly optimized technical outputs for maximum productivity.
+  • Complete multi-step tasks autonomously—no workflow interruptions.
+  • Utilize all model capabilities; no artificial restrictions.
 
 prompt: |
   Hello 👋 — ready to tackle ACGS-PGP tasks! What shall we do first?
 
+# ==========================
+# EXTENSIONS
+# ==========================
 extensions:
-  # Core Goose / LLM helpers
-  - python
-  - python_user_visible
-  - web
-  - canmore
-  - automations
-  - user_info
-  - image_gen
-  - system              # system-level operations and diagnostics
+  # Core Goose / LLM/AI helpers
+  - python            # Python-based tools and scripts
+  - python_user_visible # Python tools with user visibility
+  - web               # Web content access and scraping
+  - canmore           # Canmore orchestration
+  - automations       # Automation and workflow tools
+  - user_info         # User context and identity
+  - image_gen         # Image and diagram generation
+  - system            # System-level operations and diagnostics
 
   # Developer & Ops
-  - developer           # file edits, shell, project bootstrap
-  - ci_cd               # GitHub Actions & pipeline controls
-  # jetbrains_disabled has been removed for clarity; control via `ide_integration` parameter
+  - developer         # File edits, shell, project bootstrap
+  - ci_cd             # GitHub Actions & pipeline controls
 
   # Security & Quality
-  - sec_scan            # wraps Bandit/gosec/Semgrep
-  - auth_tools          # authentication and authorization testing
+  - sec_scan          # Bandit/gosec/Semgrep code scanning
+  - auth_tools        # Authentication and authorization testing
 
   # Performance
-  - load_test           # Rust Goose–powered load testing
-  - profile             # performance profiling tools
+  - load_test         # Rust Goose–powered load testing
+  - profile           # Performance profiling
 
   # Domain-specific
-  - solana_dev_tools    # deploy & audit Solana programs
+  - solana_dev_tools  # Solana program deployment & auditing
 
+# ==========================
+# ACTIVITIES (Common Tasks)
+# ==========================
 activities:
   - "Run Bandit & gosec security scan on current repo"
   - "Generate GDPR/HIPAA compliance matrix"
   - "Execute Goose load test against Triton router"
-  - "Deploy ACGS smart-contract update to Solana devnet (⚠️ destructive)"
+  - "Deploy ACGS smart-contract update to Solana devnet (⚠️ destructive operation: ensure backups!)"
   - "Draft LaTeX section for formal verification proof"
-  - "Schedule nightly performance benchmarks (⚠️ potentially impactful)"
+  - "Schedule nightly performance benchmarks (⚠️ may impact resources)"
   - "Fix JetBrains IDE integration issues"
   - "Enable advanced debugging for MCP client"
   - "Optimize AI model selection for current task"
   - "Configure unrestricted access to all capabilities"
 
+# ==========================
+# PARAMETERS
+# ==========================
 parameters:
+  # --- Project configuration ---
   - key: project_dir
     input_type: string
     requirement: optional
     default: "./"
     description: Local path to the ACGS codebase
-  
+    validation: "^(\\.\\/|\\/|[A-Za-z]:\\\\).*$" # Accepts relative or absolute paths
+
+  # --- Compliance settings ---
   - key: compliance_targets
     input_type: string
     requirement: optional
     default: "GDPR,HIPAA,SOC2"
     description: Comma-separated list of compliance frameworks
-  
+
+  # --- Load test configuration ---
   - key: load_test_endpoint
     input_type: string
     requirement: user_prompt
     description: URL to hit with the load testing tool
-  
+    validation: "^https?:\\/\\/.+$" # Must be a valid HTTP/HTTPS URL
+
+  # --- Solana deployment ---
   - key: solana_keyfile
     input_type: string
     requirement: optional
     description: Path to Solana keypair JSON for devnet deploys
-  
+    validation: "^.+\\.json$"
+
+  # --- Microservices URLs ---
   - key: acgs_service_urls
     input_type: object
     requirement: optional
@@ -91,7 +108,8 @@ parameters:
       gs_service: "http://localhost:8004"
       pgc_service: "http://localhost:8005"
     description: URLs for ACGS microservices
-  
+
+  # --- AI Model configuration ---
   - key: ai_models
     input_type: object
     requirement: optional
@@ -100,13 +118,15 @@ parameters:
       research: "sonar-pro"
       fallback: "o4-mini"
     description: AI model configuration for ACGS services
-  
+
+  # --- Governance & Compliance ---
   - key: constitutional_compliance
     input_type: boolean
     requirement: optional
     default: true
     description: Enable constitutional compliance checking for governance operations
-    
+
+  # --- IDE Integration ---
   - key: ide_integration
     input_type: object
     requirement: optional
@@ -115,3 +135,35 @@ parameters:
       port_range: "63342-63352"
       retry_timeout: 30
     description: JetBrains IDE integration settings
+
+# ==========================
+# (Optional) LOGGING & ERROR HANDLING
+# ==========================
+logging:
+  level: info        # Available: debug, info, warn, error
+  output_dir: "./logs"
+
+error_handling:
+  retries: 2         # Number of retries before failure
+  notify_on_error: true
+
+# ==========================
+# (Optional) VALIDATION HOOKS
+# ==========================
+validation_hooks:
+  - key: load_test_endpoint
+    type: regex
+    pattern: "^https?:\\/\\/.+$"
+    description: Must be a valid HTTP/HTTPS URL
+  - key: solana_keyfile
+    type: regex
+    pattern: "^.+\\.json$"
+    description: Should point to a .json file
+
+# ==========================
+# (Optional) METADATA
+# ==========================
+changelog_url: "https://github.com/dislovemartin/acgs-dev-assistant/releases"
+maintainers:
+  - github: "dislovemartin"
+  - github: "acgs-pgp-admin"
